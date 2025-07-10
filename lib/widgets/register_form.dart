@@ -1,4 +1,5 @@
 //flutter
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 //screens
@@ -15,6 +16,11 @@ class RegisterForm extends StatefulWidget {
 
 class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
+  final _auth = FirebaseAuth.instance;
+  String email = "";
+  String password = "";
+  String confirmPsw = "";
+  bool showSpinner = false;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -44,7 +50,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     hintText: "Inserisci il tuo username",
                   ),
@@ -53,6 +59,9 @@ class _RegisterFormState extends State<RegisterForm> {
                       return "Il campo username è obbligatorio.";
                     }
                     return null;
+                  },
+                  onChanged: (value) {
+                    email = value;
                   },
                 ),
                 const SizedBox(height: 25),
@@ -72,8 +81,13 @@ class _RegisterFormState extends State<RegisterForm> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Il campo password è obbligatorio.";
+                    } else if (value != confirmPsw) {
+                      return "Le due password non sono uguali.";
                     }
                     return null;
+                  },
+                  onChanged: (value) {
+                    password = value;
                   },
                 ),
                 const SizedBox(height: 25),
@@ -93,18 +107,32 @@ class _RegisterFormState extends State<RegisterForm> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Il campo password è obbligatorio.";
+                    } else if (value != password) {
+                      return "Le due password non sono uguali.";
                     }
                     return null;
+                  },
+                  onChanged: (value) {
+                    confirmPsw = value;
                   },
                 ),
                 const SizedBox(height: 40),
                 OutlinedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (ctx) => Homepage()),
-                      );
+                      try {
+                        final newUser = await _auth
+                            .createUserWithEmailAndPassword(
+                              email: email,
+                              password: password,
+                            );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (ctx) => Homepage()),
+                        );
+                      } catch (e) {
+                        print(e);
+                      }
                     }
                   },
                   style: OutlinedButton.styleFrom(
