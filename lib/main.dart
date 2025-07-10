@@ -24,6 +24,10 @@ class MyApp extends StatelessWidget {
             fontSize: 32,
             fontWeight: FontWeight.w700,
           ),
+          bodyMedium: GoogleFonts.lato(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+          ),
           bodySmall: GoogleFonts.lato(
             fontSize: 16,
             fontWeight: FontWeight.w400,
@@ -34,7 +38,6 @@ class MyApp extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             side: BorderSide(width: 1.2),
             shape: const RoundedRectangleBorder(
-              //border radius rimosso
               borderRadius: BorderRadiusGeometry.all(Radius.circular(4)),
             ),
           ),
@@ -61,6 +64,7 @@ class MyApp extends StatelessWidget {
             fontWeight: FontWeight.w400,
           ),
         ),
+        appBarTheme: AppBarTheme(backgroundColor: Color.fromRGBO(0, 0, 0, 1)),
       ),
       home: SplashScreen(),
     );
