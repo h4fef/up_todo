@@ -53,195 +53,12 @@ class _RegisterFormState extends State<RegisterForm> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Email",
-                        style: GoogleFonts.lato(
-                          color: Color.fromRGBO(255, 255, 255, 0.87),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          hintText: "Inserisci la tua email",
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Il campo email è obbligatorio.";
-                          }
-                          return null;
-                        },
-                        onChanged: (value) {
-                          email = value;
-                          _validateForm();
-                        },
-                      ),
-                      const SizedBox(height: 25),
-                      Text(
-                        "Password",
-                        style: GoogleFonts.lato(
-                          color: Color.fromRGBO(255, 255, 255, 0.87),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: true,
-                        decoration: InputDecoration(hintText: "********"),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Il campo password è obbligatorio.";
-                          } else if (value != confirmPsw) {
-                            return "Le due password non sono uguali.";
-                          }
-                          return null;
-                        },
-                        onChanged: (value) {
-                          password = value;
-                          _validateForm();
-                        },
-                      ),
-                      const SizedBox(height: 25),
-                      Text(
-                        "Conferma Password",
-                        style: GoogleFonts.lato(
-                          color: Color.fromRGBO(255, 255, 255, 0.87),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: true,
-                        decoration: InputDecoration(hintText: "********"),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Il campo password è obbligatorio.";
-                          } else if (value != password) {
-                            return "Le due password non sono uguali.";
-                          }
-                          return null;
-                        },
-                        onChanged: (value) {
-                          confirmPsw = value;
-                          _validateForm();
-                        },
-                      ),
-                      const SizedBox(height: 40),
-                      OutlinedButton(
-                        onPressed: formValid
-                            ? () async {
-                                if (_formKey.currentState!.validate()) {
-                                  try {
-                                    setState(() {
-                                      showSpinner = true;
-                                    });
-                                    final newUser = await _auth
-                                        .createUserWithEmailAndPassword(
-                                          email: email,
-                                          password: password,
-                                        );
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          "Registrazione avvenuta correttamente.",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(
-                                                color: Color.fromRGBO(
-                                                  255,
-                                                  255,
-                                                  255,
-                                                  0.87,
-                                                ),
-                                              ),
-                                        ),
-                                      ),
-                                    );
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (ctx) => Homepage(),
-                                      ),
-                                    );
-                                  } catch (e) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          "Registrazione fallita. ${e.toString()}",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(
-                                                color: Color.fromRGBO(
-                                                  255,
-                                                  255,
-                                                  255,
-                                                  0.87,
-                                                ),
-                                              ),
-                                        ),
-                                      ),
-                                    );
-                                  } finally {
-                                    setState(() {
-                                      showSpinner = false;
-                                    });
-                                  }
-                                }
-                              }
-                            : null,
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.resolveWith<Color>((
-                                states,
-                              ) {
-                                if (states.contains(MaterialState.disabled)) {
-                                  return Color(0xff8875FF).withOpacity(0.4);
-                                }
-                                return Color(0xff8875FF);
-                              }),
-                          minimumSize: MaterialStateProperty.all(Size(360, 30)),
-                        ),
-                        child: Text(
-                          'Registrati',
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ),
+                      _usernameInput(context),
+                      _passwordInput(context),
+                      _confirmPsw(context),
+                      _signBtn(context),
                       const SizedBox(height: 31),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Divider(
-                              thickness: 1,
-                              color: Color.fromRGBO(151, 151, 151, 1),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsetsGeometry.symmetric(
-                              horizontal: 14,
-                            ),
-                            child: Text(
-                              "OPPURE",
-                              style: GoogleFonts.lato(
-                                color: Color.fromRGBO(151, 151, 151, 1),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Divider(
-                              thickness: 1,
-                              color: Color.fromRGBO(151, 151, 151, 1),
-                            ),
-                          ),
-                        ],
-                      ),
+                      _divider(context),
                       const SizedBox(height: 29),
                       LoginWithButtons(action: 'Registrati'),
                     ],
@@ -252,5 +69,196 @@ class _RegisterFormState extends State<RegisterForm> {
           );
   }
 
-  _usernameInput(context) {}
+  _usernameInput(context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Email",
+          style: GoogleFonts.lato(
+            color: Color.fromRGBO(255, 255, 255, 0.87),
+            fontWeight: FontWeight.w400,
+            fontSize: 16,
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(hintText: "Inserisci la tua email"),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Il campo email è obbligatorio.";
+            }
+            return null;
+          },
+          onChanged: (value) {
+            email = value;
+            _validateForm();
+          },
+        ),
+        const SizedBox(height: 25),
+      ],
+    );
+  }
+
+  _passwordInput(context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Password",
+          style: GoogleFonts.lato(
+            color: Color.fromRGBO(255, 255, 255, 0.87),
+            fontWeight: FontWeight.w400,
+            fontSize: 16,
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          keyboardType: TextInputType.visiblePassword,
+          obscureText: true,
+          decoration: InputDecoration(hintText: "********"),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Il campo password è obbligatorio.";
+            } else if (value != confirmPsw) {
+              return "Le due password non sono uguali.";
+            }
+            return null;
+          },
+          onChanged: (value) {
+            password = value;
+            _validateForm();
+          },
+        ),
+        const SizedBox(height: 25),
+      ],
+    );
+  }
+
+  _confirmPsw(context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Conferma Password",
+          style: GoogleFonts.lato(
+            color: Color.fromRGBO(255, 255, 255, 0.87),
+            fontWeight: FontWeight.w400,
+            fontSize: 16,
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          keyboardType: TextInputType.visiblePassword,
+          obscureText: true,
+          decoration: InputDecoration(hintText: "********"),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Il campo password è obbligatorio.";
+            } else if (value != password) {
+              return "Le due password non sono uguali.";
+            }
+            return null;
+          },
+          onChanged: (value) {
+            confirmPsw = value;
+            _validateForm();
+          },
+        ),
+        const SizedBox(height: 40),
+      ],
+    );
+  }
+
+  _signBtn(context) {
+    return Row(
+      children: [
+        OutlinedButton(
+          onPressed: formValid
+              ? () async {
+                  if (_formKey.currentState!.validate()) {
+                    try {
+                      setState(() {
+                        showSpinner = true;
+                      });
+                      await _auth.createUserWithEmailAndPassword(
+                        email: email,
+                        password: password,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            "Registrazione avvenuta correttamente.",
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: Color.fromRGBO(255, 255, 255, 0.87),
+                                ),
+                          ),
+                        ),
+                      );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (ctx) => Homepage()),
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: Color.fromRGBO(18, 18, 18, 1),
+                          content: Text(
+                            "Registrazione fallita. ${e.toString()}",
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: Color.fromRGBO(255, 255, 255, 0.87),
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16,
+                                ),
+                          ),
+                        ),
+                      );
+                    } finally {
+                      setState(() {
+                        showSpinner = false;
+                      });
+                    }
+                  }
+                }
+              : null,
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+              if (states.contains(WidgetState.disabled)) {
+                return Color(0xff8875FF).withValues(alpha: 0.4);
+              }
+              return Color(0xff8875FF);
+            }),
+            minimumSize: WidgetStateProperty.all(Size(360, 30)),
+          ),
+          child: Text(
+            'Registrati',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ),
+      ],
+    );
+  }
+
+  _divider(context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Divider(thickness: 1, color: Color.fromRGBO(151, 151, 151, 1)),
+        ),
+        Padding(
+          padding: EdgeInsetsGeometry.symmetric(horizontal: 14),
+          child: Text(
+            "OPPURE",
+            style: GoogleFonts.lato(color: Color.fromRGBO(151, 151, 151, 1)),
+          ),
+        ),
+        Expanded(
+          child: Divider(thickness: 1, color: Color.fromRGBO(151, 151, 151, 1)),
+        ),
+      ],
+    );
+  }
 }

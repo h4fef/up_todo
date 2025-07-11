@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 //data
 import 'package:up_todo/data/home_homeboarding.dart';
-//screens
-import 'package:up_todo/screens/preview_login/welcome_login.dart';
 //widgets
 import 'package:up_todo/widgets/on_boarding_actions.dart';
 import 'package:up_todo/widgets/on_boarding_buttons.dart';
@@ -38,10 +36,7 @@ class _OnBoardingState extends State<OnBoarding> {
   }
 
   void _jumpToLogin() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (ctx) => const WelcomeLogin()),
-    );
+    Navigator.pushNamed(context, '/welcome-login');
   }
 
   @override

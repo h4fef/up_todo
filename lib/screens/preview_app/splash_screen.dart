@@ -2,8 +2,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-//screens
-import 'package:up_todo/screens/preview_app/onboarding.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,10 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer(
       Duration(seconds: 10),
-      () => Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => OnBoarding()),
-      ),
+      () => Navigator.pushNamed(context, '/on-boarding'),
     );
   }
 

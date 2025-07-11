@@ -3,7 +3,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 //screen
+import 'package:up_todo/screens/homepage/homepage.dart';
+import 'package:up_todo/screens/login/login.dart';
+import 'package:up_todo/screens/preview_app/onboarding.dart';
 import 'package:up_todo/screens/preview_app/splash_screen.dart';
+import 'package:up_todo/screens/preview_login/welcome_login.dart';
+import 'package:up_todo/screens/register/register.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'UpTodo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Color(0xFF8685E7),
@@ -69,7 +74,15 @@ class MyApp extends StatelessWidget {
         ),
         appBarTheme: AppBarTheme(backgroundColor: Color.fromRGBO(0, 0, 0, 1)),
       ),
-      home: SplashScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => SplashScreen(),
+        '/on-boarding': (context) => OnBoarding(),
+        '/welcome-login': (context) => WelcomeLogin(),
+        '/login': (context) => Login(),
+        '/sign-in': (context) => Register(),
+        '/home': (context) => Homepage(),
+      },
     );
   }
 }

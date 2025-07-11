@@ -25,7 +25,7 @@ class WelcomeLoginButtons extends StatelessWidget {
   _loginBtn(context) {
     return OutlinedButton(
       onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (ctx) => Login()));
+        Navigator.pushNamed(context, '/login');
       },
       style: OutlinedButton.styleFrom(
         backgroundColor: Color(0xff8875FF),
@@ -38,10 +38,7 @@ class WelcomeLoginButtons extends StatelessWidget {
   _registerBtn(context) {
     return OutlinedButton(
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (ctx) => Register()),
-        );
+        Navigator.pushNamed(context, '/sign-in');
       },
       style: OutlinedButton.styleFrom(
         backgroundColor: Color.fromRGBO(18, 18, 18, 1),

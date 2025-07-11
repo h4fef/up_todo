@@ -51,159 +51,11 @@ class _LoginFormState extends State<LoginForm> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Email",
-                        style: GoogleFonts.lato(
-                          color: Color.fromRGBO(255, 255, 255, 0.87),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          hintText: "Inserisci la tua email",
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Il campo email è obbligatorio.";
-                          }
-                          return null;
-                        },
-                        onChanged: (value) {
-                          email = value;
-                          _validateForm();
-                        },
-                      ),
-                      const SizedBox(height: 25),
-                      Text(
-                        "Password",
-                        style: GoogleFonts.lato(
-                          color: Color.fromRGBO(255, 255, 255, 0.87),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: true,
-                        decoration: InputDecoration(hintText: "********"),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Il campo password è obbligatorio.";
-                          }
-                          return null;
-                        },
-                        onChanged: (value) {
-                          password = value;
-                          _validateForm();
-                        },
-                      ),
-                      const SizedBox(height: 69),
-                      OutlinedButton(
-                        onPressed: formValid
-                            ? () async {
-                                if (_formKey.currentState!.validate()) {
-                                  try {
-                                    setState(() {
-                                      showSpinner = true;
-                                    });
-                                    final userLogin = await FirebaseAuth
-                                        .instance
-                                        .signInWithEmailAndPassword(
-                                          email: email,
-                                          password: password,
-                                        );
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          "Login avvenuto correttamente.",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(
-                                                color: Color.fromRGBO(
-                                                  255,
-                                                  255,
-                                                  255,
-                                                  0.87,
-                                                ),
-                                              ),
-                                        ),
-                                      ),
-                                    );
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (ctx) => Homepage(),
-                                      ),
-                                    );
-                                  } catch (e) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          "Login fallito: ${e.toString()}",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(
-                                                color: Color.fromRGBO(
-                                                  255,
-                                                  255,
-                                                  255,
-                                                  0.87,
-                                                ),
-                                              ),
-                                        ),
-                                      ),
-                                    );
-                                  } finally {
-                                    setState(() {
-                                      showSpinner = false;
-                                    });
-                                  }
-                                }
-                              }
-                            : null,
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: Color(0xff8875FF),
-                          minimumSize: Size(360, 30),
-                        ),
-                        child: Text(
-                          'Login',
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ),
+                      _emailField(context),
+                      _passwordField(context),
+                      _loginBtn(context),
                       const SizedBox(height: 31),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Divider(
-                              thickness: 1,
-                              color: Color.fromRGBO(151, 151, 151, 1),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsetsGeometry.symmetric(
-                              horizontal: 14,
-                            ),
-                            child: Text(
-                              "OPPURE",
-                              style: GoogleFonts.lato(
-                                color: Color.fromRGBO(151, 151, 151, 1),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Divider(
-                              thickness: 1,
-                              color: Color.fromRGBO(151, 151, 151, 1),
-                            ),
-                          ),
-                        ],
-                      ),
+                      _divider(context),
                       const SizedBox(height: 29),
                       LoginWithButtons(action: 'login'),
                     ],
@@ -212,5 +64,152 @@ class _LoginFormState extends State<LoginForm> {
               ],
             ),
           );
+  }
+
+  _emailField(context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Email",
+          style: GoogleFonts.lato(
+            color: Color.fromRGBO(255, 255, 255, 0.87),
+            fontWeight: FontWeight.w400,
+            fontSize: 16,
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          keyboardType: TextInputType.text,
+          decoration: InputDecoration(hintText: "Inserisci la tua email"),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Il campo email è obbligatorio.";
+            }
+            return null;
+          },
+          onChanged: (value) {
+            email = value;
+            _validateForm();
+          },
+        ),
+        const SizedBox(height: 25),
+      ],
+    );
+  }
+
+  _passwordField(context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Password",
+          style: GoogleFonts.lato(
+            color: Color.fromRGBO(255, 255, 255, 0.87),
+            fontWeight: FontWeight.w400,
+            fontSize: 16,
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          keyboardType: TextInputType.visiblePassword,
+          obscureText: true,
+          decoration: InputDecoration(hintText: "********"),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Il campo password è obbligatorio.";
+            }
+            return null;
+          },
+          onChanged: (value) {
+            password = value;
+            _validateForm();
+          },
+        ),
+        const SizedBox(height: 69),
+      ],
+    );
+  }
+
+  _loginBtn(context) {
+    return OutlinedButton(
+      onPressed: formValid
+          ? () async {
+              if (_formKey.currentState!.validate()) {
+                try {
+                  setState(() {
+                    showSpinner = true;
+                  });
+                  await FirebaseAuth.instance.signInWithEmailAndPassword(
+                    email: email,
+                    password: password,
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: Color.fromRGBO(18, 18, 18, 1),
+                      content: Text(
+                        "Login avvenuto correttamente.",
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Color.fromRGBO(255, 255, 255, 0.87),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  );
+                  Navigator.pushNamed(context, '/home');
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: Color.fromRGBO(18, 18, 18, 1),
+                      content: Text(
+                        "Login fallito: ${e.toString()}",
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Color.fromRGBO(255, 255, 255, 0.87),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  );
+                } finally {
+                  setState(() {
+                    showSpinner = false;
+                  });
+                }
+              }
+            }
+          : null,
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return Color(0xff8875FF).withValues(alpha: 0.4);
+          }
+          return Color(0xff8875FF);
+        }),
+        minimumSize: WidgetStateProperty.all(Size(360, 30)),
+      ),
+      child: Text('Login', style: Theme.of(context).textTheme.bodySmall),
+    );
+  }
+
+  _divider(context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Divider(thickness: 1, color: Color.fromRGBO(151, 151, 151, 1)),
+        ),
+        Padding(
+          padding: EdgeInsetsGeometry.symmetric(horizontal: 14),
+          child: Text(
+            "OPPURE",
+            style: GoogleFonts.lato(color: Color.fromRGBO(151, 151, 151, 1)),
+          ),
+        ),
+        Expanded(
+          child: Divider(thickness: 1, color: Color.fromRGBO(151, 151, 151, 1)),
+        ),
+      ],
+    );
   }
 }
